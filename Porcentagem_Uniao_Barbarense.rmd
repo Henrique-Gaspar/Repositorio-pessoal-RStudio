@@ -4,7 +4,7 @@ output:
     highlight: textmate
     theme: paper
 ---
-#Porcentagem de vitórias do União Agrícola Barbarense Futebol Clube entre os anos de 2009 e 2019
+##Porcentagem de vitórias do União Agrícola Barbarense Futebol Clube entre os anos de 2009 e 2019
 ##José Henrique Rasteiro Gaspar
 
 [matchendirect]: https://www.matchendirect.fr/equipe/uniao-barbarense.html
