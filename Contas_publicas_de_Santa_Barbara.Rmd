@@ -1,0 +1,165 @@
+---
+title: "Contas públicas de Santa Bárbara d'Oeste"
+author: "José Henrique Rasteiro Gaspar"
+date: "29 de junho de 2019"
+output: html_document
+---
+
+
+#Pacotes
+```{r}
+library(ggplot2)
+```
+
+**Parte 1 - Dados
+
+```{r DADOS¹}
+options(scipen = 999)
+
+Anos <- c(2010,2011,2012,2013,2014,2015,2016,2017,2018)
+
+Receitas_realizadas <- c(265426051.01,311831896.54,329024430.85,366781607.99,404205053.26,408248854.04,459095140.23,487316684.97,538295988.16)
+
+Despesas_empenhadas <- c(269683643.31,315969561.24,352444085.43,377384921.45,410107072.27,446409305.16,468251035.24,508262755.16,548971164.25)
+```
+# *Considerando o refinanciamento.
+
+# *Considerando o refinanciamento e a amortização da dívida.
+
+```{r DADOS²}
+#Receitas realizadas - despesas empenhadas
+Déficit <- c(4257592.30,4137664.70,23419654.58,10603313.46,5902019.01,38160451.12,9155895.01,20946070.19,10675176.09)
+
+#circulante e não circulante
+Passivo <- c(61757998.16,56228949.43,62015985.36,50388268.17,65871805.39,97520018.63,114775422.20,131064455.46,163104290.22)
+
+#circulante e não circulante
+Ativo <- c(234301308.55,268439252.73,276698983.88,774955007.71,1296891619.10,1382334929.01,1312423095.66,1323631111.06,1464875657.91)
+
+atpa <- data.frame(Passivo,Ativo)
+```
+#Tabela de comparação entre o ativos e o passivo total
+
+Passivo  |   Ativo 
+---------|------------
+61757998 | 234301309
+56228949 | 268439253 
+62015985 | 276698984
+50388268 | 774955008
+65871805 | 1296891619
+97520019 | 1382334929
+114775422| 1312423096
+131064455| 1323631111
+163104290| 1464875658
+
+```{r PLOTAR¹}
+ggplot(atpa,aes(x=Anos))+
+  geom_line(aes(y=Ativo,color="Ativo"))+
+  geom_line(aes(y=Passivo,color="Passivo"))+
+  labs(y="Ativo X Passivo", x="Anos",
+       title="Comparação do ativo e do passivo",
+       subtitle="entre os anos de 2010 e 2018",
+       caption="Portal da transparência do município de Santa Bárbara d'Oeste")
+```
+
+```{r PLOTAR²}
+#bens imoveis
+Imoveis <- c(59342857.54,59348893.76,66536636.88,553557386.07,1053944405.25,1086659511.04,988077268.38,1015881420.43,1063087003.21)
+
+ativo_imovel <- data.frame(Ativo,Imoveis)
+
+ggplot(ativo_imovel,aes(x=Anos))+
+  geom_line(aes(y=Imoveis,color="Imoveis"))+
+  geom_line(aes(y=Ativo,color="Ativo"))+
+  labs(x="Anos",y="Imoveis X Ativo",
+       title="Comparação do ativo total e do ativo imovel",
+       subtitle="Entre os anos de 2010 e 2018",
+       caption="Fonte: Portal da transparência do município de Santa Bárbara d'Oeste")
+```
+#Tabela de comparação entre os ativos totais e os ativos imobilizados
+
+Ativo       |  Imoveis
+------------|------------
+234301309   |  59342858
+268439253   |  59348894
+276698984   |  66536637
+774955008   |  553557386
+1296891619  |  1053944405
+1382334929  |  1086659511
+1312423096  |  988077268
+1323631111  |  1015881420
+1464875658  |  1063087003
+
+```{r}
+#Ativo circulante (curto prazo)
+Ativo_financeiro <- c(44754605.86,47119495.20,34726067.65,41527989.12,65187267.56,36201191.35,41924988.16,43735219.22,45758917.08)
+
+#Passivo circulante (curto prazo)
+Passivo_financeiro <- c(28894934.31,33233598.30,42323326.31,33115777.82,49146017.79,79210776.30,83103815.61,88957444.84,83617560.33)
+
+ativo_passivo_circulante <- data.frame(Ativo_financeiro,Passivo_financeiro)
+```
+#Tabela de comparação entre o ativo financiero e o passivo financeiro
+
+Ativo fin |Passivo fin
+----------|----------
+44754606	|  28894934
+47119495	|  33233598
+34726068	|  42323326
+41527989	|  33115778
+65187268	|  49146018
+36201191	|  79210776
+41924988	|  83103816
+43735219	|  88957445
+45758917	|  83617560
+
+```{r PLOTAR³}
+ggplot(ativo_passivo_circulante,aes(x=Anos))+
+  geom_line(aes(y=Ativo_financeiro,color="Ativo financeiro"))+
+  geom_line(aes(y=Passivo_financeiro,color="Passivo financeiro"))+
+  labs(y="Ativo Financeiro X Passivo Financeiro", x="Anos",
+       title="Comparação do ativo e do passivo financeiro",
+       subtitle="Município de Santa Bárbara d'Oeste",
+       caption="Fonte: Portal da transparência do município de Santa Bárbara d'Oeste")
+```
+
+
+```{r DADOS³}
+Dados <- data.frame(Anos,Receitas_realizadas,Despesas_empenhadas,Déficit,Passivo)
+
+superavit <- c(Receitas_realizadas>Despesas_empenhadas)
+```
+#Tabela que reuno os principais dados dos balanços
+
+Anos |  Receitas  | Despesas  | Déficit | Passivo
+-----|------------|-----------|---------|--------
+2010 |  265426051	| 269683643	| 4257592	| 61757998
+2011 |	311831897	| 315969561	| 4137665	| 56228949
+2012 |	329024431	| 352444085	| 23419655|	62015985
+2013 |	366781608	| 377384921	| 10603313|	50388268
+2014 |	404205053	| 410107072	| 5902019	| 65871805
+2015 |	408248854	| 446409305	| 38160451|	97520019
+2016 |	459095140	| 468251035	| 9155895	| 114775422
+2017 |  487316685	| 508262755	| 20946070|	131064455
+2018 |	538295988	| 548971164	| 10675176|	163104290
+
+```{r PLOTAR£}
+ggplot(Dados,aes(x=Anos))+
+  geom_line(aes(y=Receitas_realizadas, color="Receitas Realizadas"))+
+  geom_line(aes(y=Despesas_empenhadas,color="Despesas Empenhadas"))+
+  labs(title= "Evolução das receitas realizadas e despesas empenhadas",
+       subtitle= "Município de Santa Bárbara d'Oeste",
+       x="Anos", y= "Receitas Realizadas X Despesas Empenhadas",
+       caption = "Fonte: Portal da transparência do município de Santa Bárbara d'Oeste")
+
+ggplot(Dados,aes(x=Anos, y=Passivo))+
+  geom_bar(stat="identity")+
+  labs(title="Variação do passivo entre os anos de 2010 e 2018",
+       subtitle="Município de Santa Bárbara d'Oeste",
+       caption = "Fonte: Portal de transparência de Santa Barbara d'Oeste")
+```
+
+##Dados retirados do portal da transparência do município de Santa Bárbara d'Oeste
+#FIM
+
+        
