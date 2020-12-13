@@ -1,0 +1,58 @@
+---
+title: "Gráficos Animados de Ações"
+author: "José Henrique R. Gaspar"
+date: "8 de dezembro de 2020"
+output: html_document
+---
+
+```{r packages, include=FALSE}
+library(colorspace)
+library(ggplot2)
+library(gganimate)
+library(gifski)
+library(scales)
+library(directlabels)
+library(BatchGetSymbols)
+```
+
+Plot das seguintes ações:
+
+- Americanas (LAME4)
+- Romi (ROMI3)
+- Petrobras (PETR4)
+- Itaú (ITUB4)
+
+```{r tickers, include = FALSE}
+
+tickers <- c('LAME4.SA', 'ROMI3.SA', 'PETR4.SA', 'ITUB4.SA')
+
+
+first_date <- '2010-01-01'
+last_date <- '2020-12-08'
+bench_ticker <- '^BVSP'   
+
+precos <- BatchGetSymbols(tickers = tickers,
+                         first.date = first_date,
+                         last.date = last_date,
+                         bench.ticker = bench_ticker,
+                         do.cache = F)
+
+precos2 = precos$df.tickers
+precos3 = precos2[complete.cases(precos2),]
+precos = data.frame(precos3)
+attach(precos)
+
+```
+
+
+```{r plotagem, echo=FALSE}
+ggplot(precos, aes(x = ref.date, y = price.close, group = ticker))+
+  geom_line()+
+  theme_bw()+
+  facet_wrap(~ticker, scales = 'free_y')+
+  coord_cartesian(clip='off')+
+  scale_y_continuous(labels = dollar_format(prefix = "R$"))+
+  labs(caption = "Fonte: Yahoo Finance", title = "Preço de Ações", y = "Preço de Fechamento", x="Período")+
+  transition_reveal(ref.date)
+```
+

@@ -1,0 +1,44 @@
+---
+title: "Annual – Manufactures – World – Brazil"
+author: "José Henrique R. Gaspar"
+date: "11 de dezembro de 2020"
+output: html_document
+---
+
+```{r pacotes, include=FALSE}
+library(tseries)
+library(urca)
+library(tseries)
+library(tidyverse)
+library(rdbnomics)
+```
+
+
+```{r dados}
+dados = rdb("WTO/ITS_MTV_AX/076.MA.000.A")
+dados = dados[,c(8)]
+dados$original_value = as.numeric(as.character(dados$original_value))
+dados = diff(dados$original_value)
+dados = ts(dados, start = "1981", end = "2019")
+```
+
+
+```{r plot, echo=FALSE}
+ts.plot(dados)
+```
+
+```{r testes, echo=FALSE}
+ur.df(dados)
+ur.kpss(dados)
+pacf(dados)
+acf(dados)
+```
+```{r modelo}
+modelo = auto.arima(dados, d=1)
+summary(modelo)
+```
+
+```{r}
+plot(forecast(modelo, h=12))
+```
+
